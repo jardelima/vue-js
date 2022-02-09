@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue js</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+</head>
+<body>
+    <style>
+        .verde {
+            color: green;
+        }
+
+        .vermelho {
+            color: red;
+        }
+    </style>
+
+    <div id="app"> 
+        <div>
+            <p :class="google.marketCap > apple.marketCap ? 'verde' : 'vermelho'">
+                Nome da Empresa: {{ google.companyName }}
+            </p>
+
+            <p>
+                Valor de Mercado: {{ google.marketCap }}
+            </p>
+
+        </div>
+
+        <div>
+            <p :class="apple.marketCap > google.marketCap ? 'verde' : 'vermelho'">
+                Nome da Empresa: {{ apple.companyName }}
+            </p>
+            
+            <p>
+                Valor de Mercado: {{ google.marketCap }}
+            </p>
+
+        </div>
+
+        <button @click="puxarDados">Puxar Dados</button>
+    </div>
+
+    <script>
+        const app = new Vue({
+            el: "#app", 
+            data: {
+                google: {},
+                apple: {},
+            },
+            methods: {
+                fetchGoogle() {
+                    fetch("https://api.iextrading.com/1.0/stock/googl/quote")
+                        .then(response => response.json)
+                        .then(google => {
+                            this.google = google;
+                        })
+                },
+
+                fetchApple() {
+                    fetch("https://api.iextrading.com/1.0/stock/aapl/quote")
+                        .then(response => response.json)
+                        .then(apple => {
+                            this.apple = apple;
+                        })
+                },
+
+                puxarDados() {
+                    fetchGoogle();
+                    fetchApple();
+                }
+            },
+        });
+    </script>
+</body>
+</html>
